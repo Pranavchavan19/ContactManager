@@ -1,6 +1,6 @@
 console.log("Contacts.js");
-// const baseURL = "http://localhost:8081";
-const baseURL = "https://www.scm20.site";
+const baseURL = "http://localhost:8081";
+// const baseURL = "https://www.scm20.site";
 const viewContactModal = document.getElementById("view_contact_modal");
 
 // options with default values
@@ -44,6 +44,7 @@ async function loadContactdata(id) {
   try {
     const data = await (await fetch(`${baseURL}/api/contacts/${id}`)).json();
     console.log(data);
+    
     document.querySelector("#contact_name").innerHTML = data.name;
     document.querySelector("#contact_email").innerHTML = data.email;
     document.querySelector("#contact_image").src = data.picture;
