@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en" th:replace="~{base :: parent(~{::#content}, ~{::title}, ~{::script})}">
+  <head>
+    <title>Chat</title>
+  </head>
+  <body>
+    <div id="content">
+      <!-- Sidebar for logged-in user -->
+      <div th:if="${loggedInUser}">
+        <div th:replace="~{user/sidebar :: sidebar}"></div>
+      </div>
+
+      <div class="sm:pl-64 pt-20">
+        <div>
+          <h1 class="text-5xl text-center">Start Chat</h1>
+          <p class="text-center">Send and receive messages in real time</p>
+
+          <div class="contacts_container p-5">
+            <!-- Contact list -->
+            <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+              <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                  <tr>
+                    <th class="px-6 py-3">Name</th>
+                    <th class="px-6 py-3">Email</th>
+                    <th class="px-6 py-3">Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr th:each="c : ${contacts}"
+                      class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                    <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                        th:text="${c}">
+                      Contact Name
+                    </td>
+                    <td class="px-6 py-4">
+                      <span th:text="'chat@' + ${#strings.toLowerCase(c)} + '.com'">chat@contact.com</span>
+                    </td>
+                    <td class="px-6 py-4">
+                      <button class="bg-blue-600 text-white px-4 py-1 rounded"
+                              th:onclick="'startChat(\\'' + ${c} + '\\')'">
+                        Message
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Chat section -->
+            <div id="chat-section" class="bg-white dark:bg-gray-900 p-5 mt-5 rounded-lg shadow hidden">
+              <h2 class="text-xl font-bold mb-2">Chat with <span id="chat-with-name"></span></h2>
+              <div id="message-box" class="border h-64 overflow-y-auto p-4 bg-gray-100 dark:bg-gray-800 mb-4"></div>
+              <div class="flex gap-3">
+                <input type="text" id="fromUser" placeholder="Your Name"
+                       class="p-2 border w-1/4 rounded bg-gray-50 dark:bg-gray-700 dark:text-white" />
+                <input type="text" id="messageInput" placeholder="Type a message"
+                       class="p-2 border w-full rounded bg-gray-50 dark:bg-gray-700 dark:text-white" />
+                <button onclick="sendMessage()"
+                        class="bg-green-600 text-white px-4 py-2 rounded">
+                  Send
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- WebSocket and STOMP -->
+    <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1.6.1/dist/sockjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
+
+    <script>
+      let stompClient = null;
+      let currentToUser = '';
+
+      function connectSocket() {
+        const socket = new SockJS('/ws');
+        stompClient = Stomp.over(socket);
+        stompClient.connect({}, function () {
+          stompClient.subscribe('/topic/messages', function (msg) {
+            const message = JSON.parse(msg.body);
+            if (message.toUser === currentToUser || message.fromUser === currentToUser) {
+              displayMessage(message);
+            }
+          });
+        });
+      }
+
+      function startChat(contact) {
+        currentToUser = contact;
+        document.getElementById('chat-with-name').innerText = contact;
+        document.getElementById('chat-section').classList.remove('hidden');
+        document.getElementById('message-box').innerHTML = '';
+        // Optionally: Load chat history using AJAX
+      }
+
+      function sendMessage() {
+        const from = document.getElementById('fromUser').value;
+        const message = document.getElementById('messageInput').value;
+
+        if (from && message && currentToUser) {
+          stompClient.send("/app/chat", {}, JSON.stringify({
+            fromUser: from,
+            toUser: currentToUser,
+            content: message
+          }));
+
+          document.getElementById('messageInput').value = '';
+        }
+      }
+
+      function displayMessage(message) {
+        const messageBox = document.getElementById('message-box');
+        const msgEl = document.createElement('div');
+        msgEl.className = "mb-2";
+        msgEl.innerHTML = `<strong>${message.fromUser}:</strong> ${message.content}`;
+        messageBox.appendChild(msgEl);
+        messageBox.scrollTop = messageBox.scrollHeight;
+      }
+
+      connectSocket();
+    </script>
+  </body>
+</html>

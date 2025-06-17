@@ -41,6 +41,12 @@ public class UserController {
         return  "user/feedback";
     }
 
+    @RequestMapping("/chat")
+    public String chat(){
+       
+        return "user/chat";
+    }
+
 
     // user add contacts page
 
