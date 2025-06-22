@@ -1,8 +1,9 @@
 package com.scm.controllers;
 
+import com.scm.entities.Contact;
 import com.scm.model.ChatMessage;
 import com.scm.repsitories.ChatMessageRepository;
-import com.scm.repsitories.UserRepository;
+import com.scm.repsitories.ContactRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.*;
 import org.springframework.stereotype.Controller;
@@ -20,14 +21,14 @@ public class ChatController {
     private ChatMessageRepository chatRepo;
 
     @Autowired
-    private UserRepository userRepo;
+    private ContactRepo contactRepo;
 
     @GetMapping("/chat")
     public String chatPage(Model model, Principal principal) {
-        String currentUser = principal.getName();
-        List<String> contacts = userRepo.findAllUsernamesExcept(currentUser);
+        String currentUserEmail = principal.getName();
+        List<Contact> contacts = contactRepo.findContactsByUserEmail(currentUserEmail);
         model.addAttribute("contacts", contacts);
-        model.addAttribute("loggedInUser", currentUser);
+        model.addAttribute("loggedInUser", currentUserEmail);
         return "user/chat";
     }
 

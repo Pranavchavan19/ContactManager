@@ -11,10 +11,10 @@
 
     <div class="sm:pl-64 pt-20">
       <h1 class="text-5xl text-center">Start Chat</h1>
-      <p class="text-center">Send and receive messages in real time</p>
+      <p class="text-center mb-6">Select a contact to start messaging in real-time</p>
 
+      <!-- Contacts Table -->
       <div class="contacts_container p-5">
-        <!-- Contact list -->
         <div class="relative overflow-x-auto shadow-md sm:rounded-lg mb-5">
           <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
@@ -27,17 +27,12 @@
             <tbody>
               <tr th:each="c : ${contacts}"
                   class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white" th:text="${c}">
-                  Contact Name
-                </td>
-                <td class="px-6 py-4">
-                  <span th:text="'chat@' + ${#strings.toLowerCase(c)} + '.com'">chat@contact.com</span>
-                </td>
+                <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                    th:text="${c.name}">Contact Name</td>
+                <td class="px-6 py-4" th:text="${c.email}">contact@email.com</td>
                 <td class="px-6 py-4">
                   <button class="bg-blue-600 text-white px-4 py-1 rounded"
-                          th:onclick="'startChat(\\'' + ${c} + '\\')'">
-                    Message
-                  </button>
+                          th:onclick="'startChat(\\'' + ${c.email} + '\\')'">Message</button>
                 </td>
               </tr>
             </tbody>
@@ -49,24 +44,17 @@
           <h2 class="text-xl font-bold mb-2">Chat with <span id="chat-with-name"></span></h2>
           <div id="message-box" class="border h-64 overflow-y-auto p-4 bg-gray-100 dark:bg-gray-800 mb-4 rounded"></div>
           <div class="flex gap-3">
-            <!-- Hidden logged-in user -->
             <input type="hidden" id="fromUser" th:value="${loggedInUser}" />
-
-            <!-- Message input -->
             <input type="text" id="messageInput" placeholder="Type a message"
                    class="p-2 border w-full rounded bg-gray-50 dark:bg-gray-700 dark:text-white" />
-
-            <!-- Send Button -->
-            <button onclick="sendMessage()" class="bg-green-600 text-white px-4 py-2 rounded">
-              Send
-            </button>
+            <button onclick="sendMessage()" class="bg-green-600 text-white px-4 py-2 rounded">Send</button>
           </div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- WebSocket STOMP -->
+  <!-- WebSocket STOMP JS -->
   <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1.6.1/dist/sockjs.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
 
@@ -87,13 +75,13 @@
       });
     }
 
-    function startChat(contact) {
-      currentToUser = contact;
-      document.getElementById('chat-with-name').innerText = contact;
+    function startChat(contactEmail) {
+      currentToUser = contactEmail;
+      document.getElementById('chat-with-name').innerText = contactEmail;
       document.getElementById('chat-section').classList.remove('hidden');
       document.getElementById('message-box').innerHTML = '';
 
-      fetch(`/user/chat/history/${contact}`)
+      fetch(`/user/chat/history/${contactEmail}`)
         .then(res => res.json())
         .then(messages => {
           messages.forEach(displayMessage);
@@ -101,12 +89,12 @@
     }
 
     function sendMessage() {
-      const from = document.getElementById('fromUser').value;
+      const fromUser = document.getElementById('fromUser').value;
       const message = document.getElementById('messageInput').value;
 
-      if (from && message && currentToUser) {
+      if (fromUser && message && currentToUser) {
         stompClient.send("/app/chat", {}, JSON.stringify({
-          fromUser: from,
+          fromUser: fromUser,
           toUser: currentToUser,
           content: message
         }));
