@@ -15,6 +15,8 @@ public interface UserRepo extends JpaRepository<User, String> {
 
     Optional<User> findByEmail(String email);
 
+    Optional<User> findByName(String name);
+
     Optional<User> findByEmailAndPassword(String email, String password);
 
     Optional<User> findByEmailToken(String id);

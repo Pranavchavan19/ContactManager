@@ -118,4 +118,9 @@ public class UserServiceImpl implements UserService {
 
     }
 
+    @Override
+    public User getByName(String name) {
+       return userRepo.findByName(name).orElse(null);
+    }
+
 }

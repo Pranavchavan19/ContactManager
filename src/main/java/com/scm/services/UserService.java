@@ -23,6 +23,9 @@ public interface UserService {
 
     User getUserByEmail(String email);
 
+    User getByName(String name);
     // add more methods here related user service[logic]
+
+  
 
 }

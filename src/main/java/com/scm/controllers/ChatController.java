@@ -61,6 +61,7 @@ public class ChatController {
     public String chatHome(Model model, Authentication authentication) {
         String email = Helper.getEmailOfLoggedInUser(authentication);
         User user = userService.getUserByEmail(email);
+        // User user = userService.getByName(name);
         List<Contact> contacts = contactService.getByUserId(user.getUserId());
         model.addAttribute("contacts", contacts);
         return "user/chat"; // chat.html
