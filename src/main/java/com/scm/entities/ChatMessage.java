@@ -1,4 +1,6 @@
-package com.scm.model;
+
+
+package com.scm.entities;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
@@ -13,25 +15,40 @@ public class ChatMessage {
     private String fromUser;
     private String toUser;
     private String content;
+
     private LocalDateTime timestamp;
 
-    // Getters and setters
-
-
-
     // Constructors
-    public ChatMessage() {}
+    public ChatMessage() {
+        this.timestamp = LocalDateTime.now();
+    }
 
-    public ChatMessage(String fromUser, String toUser, String content, LocalDateTime timestamp) {
+    public ChatMessage(String fromUser, String toUser, String content) {
         this.fromUser = fromUser;
         this.toUser = toUser;
         this.content = content;
-        this.timestamp = timestamp;
+        this.timestamp = LocalDateTime.now();
     }
 
     // Getters and Setters
+
+     private boolean isRead;
+
+    // ✅ Getter & Setter
+    public boolean isRead() {
+        return isRead;
+    }
+
+    public void setRead(boolean read) {
+        this.isRead = read;
+    }
+
     public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getFromUser() {
@@ -64,5 +81,17 @@ public class ChatMessage {
 
     public void setTimestamp(LocalDateTime timestamp) {
         this.timestamp = timestamp;
+    }
+
+    // Optional toString() method for debugging/logging
+    @Override
+    public String toString() {
+        return "ChatMessage{" +
+                "id=" + id +
+                ", fromUser='" + fromUser + '\'' +
+                ", toUser='" + toUser + '\'' +
+                ", content='" + content + '\'' +
+                ", timestamp=" + timestamp +
+                '}';
     }
 }
