@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html
   lang="en"
   th:replace="~{base :: parent(~{::#content}, ~{::title}, ~{::#script})}"
@@ -13,7 +13,7 @@
       </h1>
 
       <div class="flex gap-6">
-        <!-- Contact List -->
+       
         <div class="w-1/4 bg-white shadow-lg rounded-lg p-4 border">
           <h2 class="text-2xl font-semibold mb-4 text-gray-700">
             Your Contacts
@@ -30,18 +30,22 @@
           </ul>
         </div>
 
-        <!-- Chat Area -->
+     
         <div
           class="w-2/4 flex flex-col bg-white shadow-lg rounded-lg p-4 border"
         >
-          <!-- Header -->
+          
           <div th:if="${toUser}" class="mb-4 border-b pb-2">
             <h2 class="text-xl font-semibold text-gray-800">
               Chat with <span th:text="${toUser}" class="text-blue-600"></span>
             </h2>
+            <h2 class="text-xl font-semibold text-gray-800">
+  Chat with <span th:text="${toUserName}" class="text-blue-600"></span>
+</h2>
+
           </div>
 
-          <!-- Messages -->
+          
           <div
             class="flex-1 bg-gray-50 rounded-lg p-4 overflow-y-auto mb-4 h-96"
           >
@@ -66,7 +70,7 @@
             </div>
           </div>
 
-          <!-- Message Input -->
+     
           <form
             method="post"
             action="/user/chat/send"
@@ -97,4 +101,187 @@
       </script>
     </div>
   </body>
+</html> -->
+
+
+
+
+
+<!-- <!DOCTYPE html>
+<html lang="en" th:replace="~{base :: parent(~{::#content}, ~{::title}, ~{::#script})}">
+<head>
+  <title id="title">Chat</title>
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-blue-100 min-h-screen font-sans">
+  <div id="content" class="sm:pl-64 pt-20 px-6">
+    <h1 class="text-4xl font-bold text-center mb-10 text-blue-900">💬 Direct Messages</h1>
+
+    <div class="flex gap-6">
+    
+      <div class="w-1/4 bg-white shadow-xl rounded-2xl p-5 border border-blue-200">
+        <h2 class="text-2xl font-semibold mb-4 text-blue-700 border-b pb-2">Your Contacts</h2>
+        <ul class="space-y-3">
+          <li th:each="contact : ${contacts}">
+            <a
+              th:href="@{'/user/chat/' + ${contact.email}}"
+              class="block px-4 py-2 rounded-xl hover:bg-blue-100 hover:text-blue-700 text-blue-600 font-medium transition"
+              th:text="${contact.name}">Contact Name</a>
+          </li>
+        </ul>
+      </div>
+
+    
+      <div class="w-3/4 flex flex-col bg-white shadow-xl rounded-2xl p-6 border border-blue-200">
+        
+        <div th:if="${toUser}" class="mb-4 border-b pb-3">
+          <h2 class="text-2xl font-semibold text-gray-800 flex items-center gap-2">
+            Chat with 
+            <span th:text="${toUserName}" class="text-blue-600 underline decoration-dotted"></span>
+          </h2>
+        </div>
+
+    
+        <div class="flex-1 bg-gray-50 rounded-xl p-5 overflow-y-auto mb-4 h-[500px] space-y-4 scroll-smooth scrollbar-thin scrollbar-thumb-blue-300">
+          <div th:each="msg : ${messages}">
+        
+            <div th:if="${msg.fromUser == toUser}" class="flex items-start gap-3">
+              <div class="bg-white border border-gray-200 px-4 py-3 rounded-lg shadow-sm max-w-md">
+                <p class="text-sm text-gray-500 font-semibold mb-1" th:text="${toUserName} + ':'"></p>
+                <p class="text-gray-800 leading-relaxed" th:text="${msg.content}"></p>
+                <p class="text-xs text-gray-400 mt-1" th:text="${#temporals.format(msg.timestamp, 'dd MMM yyyy, hh:mm a')}"></p>
+              </div>
+            </div>
+          
+            <div th:if="${msg.fromUser != toUser}" class="flex justify-end">
+              <div class="bg-blue-600 text-white px-4 py-3 rounded-lg shadow max-w-md ml-auto">
+                <p class="text-sm font-semibold text-white mb-1">You:</p>
+                <p th:text="${msg.content}"></p>
+                <p class="text-xs text-blue-200 mt-1 text-right" th:text="${#temporals.format(msg.timestamp, 'dd MMM yyyy, hh:mm a')}"></p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <form method="post" action="/user/chat/send" class="flex items-center gap-4 mt-auto">
+          <input type="hidden" name="toUser" th:value="${toUser}" />
+          <input
+            type="text"
+            name="content"
+            placeholder="Type your message..."
+            class="flex-1 px-4 py-2 border-2 border-blue-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:outline-none text-gray-700 placeholder-gray-400"
+            required
+          />
+          <button
+            type="submit"
+            class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-5 py-2.5 rounded-lg shadow transition transform hover:scale-105"
+          >
+            Send
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div id="script" th:fragment="script">
+    <script>
+      console.log("Chat page loaded.");
+    </script>
+  </div>
+</body>
+</html> -->
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en" th:replace="~{base :: parent(~{::#content}, ~{::title}, ~{::#script})}">
+<head>
+  <title id="title">Chat</title>
+</head>
+<body class="bg-yellow-500 font-sans">
+  <div id="content" class="min-h-screen flex items-center justify-center p-4">
+    <div class=" max-w-none h-[90vh] flex flex-col shadow-2xl rounded-2xl overflow-hidden  border-none bg-purple-900">
+      <h1 class="text-4xl font-bold text-center mb-0 ">💬 Direct Messages</h1>
+      <!-- Chat Header -->
+      <div class="bg-purple-700 text-white  px-5 py-4">
+        <h2 class="text-lg font-semibold">
+          <h1 class="font-thin"> Chat with  <span th:text="${toUserName}"  class="text-red-950  font-bold"></span></h1>
+        </h2>
+      </div>
+
+      <div class="flex-1 flex overflow-hidden">
+        
+        <!-- Contact List -->
+        <div class="w-1/3 bg-purple-600 text-white p-3  border-purple-500">
+          <div class="font-semibold mb-2">Contacts</div>
+          <ul class="space-y-1 overflow-y-auto h-full">
+            <li th:each="contact : ${contacts}">
+              <a
+                th:href="@{'/user/chat/' + ${contact.email}}"
+                th:text="${contact.name}"
+                class="block px-3 py-2 rounded hover:bg-purple-500 transition"
+              ></a>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Chat Section -->
+        <div class="w-2/3 flex flex-col bg-gray-800">
+          
+          <!-- Messages -->
+          <div class="flex-1 px-3 py-6 space-y-1 overflow-y-auto scrollbar">
+            <div th:each="msg : ${messages}">
+              
+              <!-- Received message -->
+              <div th:if="${msg.fromUser == toUser}" class="flex items-start gap-2">
+                <div class="bg-pink-400 px-4 py-2 rounded-lg shadow max-w-xs">
+                  <p class="text-gray-800" th:text="${msg.content}"></p>
+                  <span th:text="${#temporals.format(msg.timestamp, 'dd MMM yyyy, hh:mm a')}"
+                        class="block text-xs text-gray-500 mt-1 text-right"></span>
+                </div>
+              </div>
+
+              <!-- Sent message -->
+              <div th:if="${msg.fromUser != toUser}" class="flex justify-end items-start gap-2">
+                <div class="bg-green-500 text-white px-4 py-2 rounded-lg shadow max-w-xs">
+                  <p th:text="${msg.content}"></p>
+                  <span th:text="${#temporals.format(msg.timestamp, 'dd MMM yyyy, hh:mm a')}"
+                        class="block text-xs text-green-100 mt-1 text-right"></span>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- Input Form -->
+          <form method="post" action="/user/chat/send" class="px-6 py-3 bg-gray-300  flex gap-3">
+            <input type="hidden" name="toUser" th:value="${toUser}" />
+            <input
+              type="text"
+              name="content"
+              placeholder="Type a message..."
+              class="flex-1 px-4 py-2 rounded-full text-green-600 border focus:ring-2 focus:ring-green-500"
+              required
+            />
+            <button
+              type="submit"
+              class="bg-green-600 hover:bg-green-700 text-white px-5 py-2 rounded-full font-semibold"
+            >
+              Send
+            </button>
+          </form>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="script" th:fragment="script">
+    <script>
+      console.log("WhatsApp-style centered chat loaded.");
+    </script>
+  </div>
+</body>
 </html>

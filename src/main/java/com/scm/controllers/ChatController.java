@@ -83,19 +83,46 @@ public String chatPage(Model model, Principal principal) {
 }
 
 
+    // @GetMapping("/{toUser}")
+    // public String chatWithContact(@PathVariable String toUser, Model model, Authentication authentication) {
+    //     String fromUser = Helper.getEmailOfLoggedInUser(authentication);
+    //     List<ChatMessage> messages = chatService.getChatHistory(fromUser, toUser);
+    //     model.addAttribute("messages", messages);
+    //     model.addAttribute("toUser", toUser);
+
+    //     // Load contacts for sidebar
+    //     User user = userService.getUserByEmail(fromUser);
+    //     List<Contact> contacts = contactService.getByUserId(user.getUserId());
+    //     model.addAttribute("contacts", contacts);
+
+    //     return "user/chat";
+    // }
+
     @GetMapping("/{toUser}")
-    public String chatWithContact(@PathVariable String toUser, Model model, Authentication authentication) {
-        String fromUser = Helper.getEmailOfLoggedInUser(authentication);
-        List<ChatMessage> messages = chatService.getChatHistory(fromUser, toUser);
-        model.addAttribute("messages", messages);
-        model.addAttribute("toUser", toUser);
+public String chatWithContact(@PathVariable String toUser, Model model, Authentication authentication) {
+    String fromUser = Helper.getEmailOfLoggedInUser(authentication);
 
-        // Load contacts for sidebar
-        User user = userService.getUserByEmail(fromUser);
-        List<Contact> contacts = contactService.getByUserId(user.getUserId());
-        model.addAttribute("contacts", contacts);
+    // Get chat history
+    List<ChatMessage> messages = chatService.getChatHistory(fromUser, toUser);
+    model.addAttribute("messages", messages);
+    model.addAttribute("toUser", toUser);
 
-        return "user/chat";
+    // 👇 Safe null check before calling getName()
+    User contactUser = userService.getUserByEmail(toUser);
+    if (contactUser != null) {
+        model.addAttribute("toUserName", contactUser.getName());
+    } else {
+        model.addAttribute("toUserName", toUser); // fallback to email
     }
+
+    // Load current user's contacts
+    User user = userService.getUserByEmail(fromUser);
+    List<Contact> contacts = contactService.getByUserId(user.getUserId());
+    model.addAttribute("contacts", contacts);
+
+    return "user/chat";
+}
+
+
 }
 
