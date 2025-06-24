@@ -1,8 +1,12 @@
 package com.scm.controllers;
 
+import java.security.Principal;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,6 +20,8 @@ import com.scm.entities.ChatMessage;
 import com.scm.entities.Contact;
 import com.scm.entities.User;
 import com.scm.helpers.Helper;
+import com.scm.repsitories.ChatMessageRepository;
+import com.scm.repsitories.UserRepository;
 import com.scm.services.ChatService;
 import com.scm.services.ContactService;
 import com.scm.services.UserService;
@@ -33,6 +39,24 @@ public class ChatController {
     @Autowired
     private ContactService contactService;
 
+    @Autowired
+    private SimpMessagingTemplate messagingTemplate;
+
+    @Autowired
+    private ChatMessageRepository chatRepo;
+
+    @Autowired
+    private UserRepository  userRepo;
+
+    @MessageMapping("/chat.sendMessage")
+    public void sendMessage(ChatMessage message) {
+        message.setTimestamp(LocalDateTime.now());
+        chatRepo.save(message); // Save to DB
+        messagingTemplate.convertAndSendToUser(
+            message.getToUser(), "/queue/messages", message
+        );
+    }
+
     @GetMapping
     public String chatHome(Model model, Authentication authentication) {
         String email = Helper.getEmailOfLoggedInUser(authentication);
@@ -48,6 +72,15 @@ public class ChatController {
         chatService.saveMessage(new ChatMessage(fromUser, toUser, content));
         return "redirect:/user/chat/" + toUser;
     }
+
+    @GetMapping("/chat")
+public String chatPage(Model model, Principal principal) {
+    String currentUser = principal.getName();
+    List<User> contacts = userRepo.findAll();
+    model.addAttribute("contacts", contacts);
+    return "chat";
+}
+
 
     @GetMapping("/{toUser}")
     public String chatWithContact(@PathVariable String toUser, Model model, Authentication authentication) {
