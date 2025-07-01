@@ -39,15 +39,35 @@ services:
       MYSQL_PASSWORD: root1234
       EMAIL_HOST: smtp.gmail.com
       EMAIL_PORT: 587
-      EMAIL_USERNAME: batchlcwd@gmail.com
-      EMAIL_PASSWORD: dqwxmxfvukvwhnkh
-      EMAIL_DOMAIN: batchlcwd@gmail.com
-      CLOUDINARY_API_KEY: 575233445171369
-      CLOUDINARY_API_SECRET: WF88TQpJyKATyZCv4o4M0dx3xEQ
-      CLOUDINARY_NAME: derpgrwbe
+      EMAIL_USERNAME: pranav1952000@gmail.com
+      EMAIL_PASSWORD: mixd gchk opcy zdtc
+      EMAIL_DOMAIN: gmail.com
+      CLOUDINARY_API_KEY: 768324912657793
+      CLOUDINARY_API_SECRET: afGQjHAHiNDZyk7yP5iIWWmPvwo
+      CLOUDINARY_NAME: dgolpgyl4
     ports:
       - "8082:8080"
     depends_on:
       - mysql
 volumes:
   mysql_data:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
