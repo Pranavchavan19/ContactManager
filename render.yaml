@@ -1,0 +1,46 @@
+services:
+  # Spring Boot Web App
+  - type: web
+    name: scm-springboot
+    env: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    autoDeploy: true
+    envVars:
+      - key: MYSQL_HOST
+        value: mysql-db
+      - key: MYSQL_PORT
+        value: 3306
+      - key: MYSQL_DB
+        value: scm20
+      - key: MYSQL_USER
+        value: root
+      - key: MYSQL_PASSWORD
+        value: root12
+
+      - key: SHOW_SQL
+        value: true
+      - key: DDL_AUTO
+        value: update
+      - key: MAX_FILE_SIZE
+        value: 10MB
+      - key: MAX_REQUEST_SIZE
+        value: 10MB
+      - key: ACTIVE_PROFILE
+        value: prod
+
+      - key: BASE_URL
+        value: https://scm-springboot.onrender.com
+      - key: SERVER_PORT
+        value: 8080
+
+  # MySQL Private Service
+  - type: pserv
+    name: mysql-db
+    env: docker
+    plan: free
+    dockerfilePath: ./mysql/Dockerfile
+    disk:
+      name: mysql-data
+      mountPath: /var/lib/mysql
+      sizeGB: 1
