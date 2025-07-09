@@ -36,5 +36,5 @@ mysql_data/
 keyfile.txt
 
 # Ignore sensitive profile files
-/src/main/resources/application-prod.properties
+# /src/main/resources/application-prod.properties
 /src/main/resources/application-dev.properties
