@@ -1,3 +1,4 @@
+
 package com.scm.config;
 
 import jakarta.annotation.PostConstruct;
@@ -25,30 +26,30 @@ public class EmailConfig {
     private String password;
 
     @PostConstruct
-    public void checkEnv() {
-        System.out.println("✅ Email config: " + host + " | " + username);
-        System.out.println("✅ Email Config loaded");
-        System.out.println("✅ Host: " + host);
-        System.out.println("✅ Port: " + port);
-        System.out.println("✅ Username: " + username);
-        System.out.println("✅ Password: " + (password != null ? "✔️ set" : "❌ null"));
+    public void printEnvCheck() {
+        System.out.println("📧 EmailConfig env vars:");
+        System.out.println("EMAIL_HOST = " + host);
+        System.out.println("EMAIL_USERNAME = " + username);
     }
 
     @Bean
     public JavaMailSender getJavaMailSender() {
-        JavaMailSenderImpl sender = new JavaMailSenderImpl();
-        sender.setHost(host);
-        sender.setPort(port);
-        sender.setUsername(username);
-        sender.setPassword(password);
 
-        Properties props = sender.getJavaMailProperties();
+
+        System.out.println("📧 JavaMailSender Bean is initializing...");
+
+        JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
+        mailSender.setHost(host);
+        mailSender.setPort(port);
+        mailSender.setUsername(username);
+        mailSender.setPassword(password);
+
+        Properties props = mailSender.getJavaMailProperties();
         props.put("mail.transport.protocol", "smtp");
         props.put("mail.smtp.auth", "true");
         props.put("mail.smtp.starttls.enable", "true");
         props.put("mail.debug", "true");
 
-        return sender;
+        return mailSender;
     }
-
 }
