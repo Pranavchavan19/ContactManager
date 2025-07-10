@@ -55,6 +55,7 @@ import com.scm.services.EmailService;
 
 @Service
 public class EmailServiceImpl implements EmailService {
+    
 
     @Autowired
     private JavaMailSender eMailSender;
