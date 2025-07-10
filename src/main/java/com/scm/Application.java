@@ -13,7 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import java.util.List;
 import java.util.UUID;
 
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = "com.scm")
 public class Application  implements CommandLineRunner {
 
 	public static void main(String[] args) {
