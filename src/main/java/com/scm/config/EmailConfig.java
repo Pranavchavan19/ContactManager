@@ -27,6 +27,11 @@ public class EmailConfig {
     @PostConstruct
     public void checkEnv() {
         System.out.println("✅ Email config: " + host + " | " + username);
+        System.out.println("✅ Email Config loaded");
+        System.out.println("✅ Host: " + host);
+        System.out.println("✅ Port: " + port);
+        System.out.println("✅ Username: " + username);
+        System.out.println("✅ Password: " + (password != null ? "✔️ set" : "❌ null"));
     }
 
     @Bean
@@ -45,4 +50,5 @@ public class EmailConfig {
 
         return sender;
     }
+
 }
