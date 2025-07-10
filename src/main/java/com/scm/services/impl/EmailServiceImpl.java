@@ -48,6 +48,7 @@
 package com.scm.services.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
@@ -61,7 +62,9 @@ public class EmailServiceImpl implements EmailService {
     @Autowired
     private JavaMailSender eMailSender;
 
-    private final String senderEmail = System.getenv("MAIL_USERNAME"); // From Render env
+    @Value("${EMAIL_USERNAME}")
+    private String senderEmail;
+    // From Render env
 
     @Override
     public void sendEmail(String to, String subject, String body) {
