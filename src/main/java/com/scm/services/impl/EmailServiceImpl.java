@@ -1,50 +1,3 @@
-package com.scm.services.impl;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.stereotype.Service;
-
-import com.scm.services.EmailService;
-
-@Service
-public class EmailServiceImpl implements EmailService {
-
-    @Autowired
-    private JavaMailSender eMailSender;
-
-    @Value("${spring.mail.properties.domain_name}")
-    private String domainName;
-
-    @Override
-    public void sendEmail(String to, String subject, String body) {
-
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo(to);
-        message.setSubject(subject);
-        message.setText(body);
-        message.setFrom(domainName);
-        eMailSender.send(message);
-
-    }
-
-    @Override
-    public void sendEmailWithHtml() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'sendEmailWithHtml'");
-    }
-
-    @Override
-    public void sendEmailWithAttachment() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'sendEmailWithAttachment'");
-    }
-
-}
-
-
-//
 //package com.scm.services.impl;
 //
 //import org.springframework.beans.factory.annotation.Autowired;
@@ -58,31 +11,69 @@ public class EmailServiceImpl implements EmailService {
 //@Service
 //public class EmailServiceImpl implements EmailService {
 //
-//
-//    @Autowired
+//    @Autowired(required = false)
 //    private JavaMailSender eMailSender;
 //
-//    @Value("${EMAIL_USERNAME}")
-//    private String senderEmail;
-//    // From Render env
+//    @Value("${spring.mail.properties.domain_name}")
+//    private String domainName;
 //
 //    @Override
 //    public void sendEmail(String to, String subject, String body) {
+//
 //        SimpleMailMessage message = new SimpleMailMessage();
 //        message.setTo(to);
 //        message.setSubject(subject);
 //        message.setText(body);
-//        message.setFrom(senderEmail); // fixed here
+//        message.setFrom(domainName);
 //        eMailSender.send(message);
+//
 //    }
 //
 //    @Override
 //    public void sendEmailWithHtml() {
+//        // TODO Auto-generated method stub
 //        throw new UnsupportedOperationException("Unimplemented method 'sendEmailWithHtml'");
 //    }
 //
 //    @Override
 //    public void sendEmailWithAttachment() {
+//        // TODO Auto-generated method stub
 //        throw new UnsupportedOperationException("Unimplemented method 'sendEmailWithAttachment'");
 //    }
+//
 //}
+
+package com.scm.services.impl;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.stereotype.Service;
+import com.scm.services.EmailService;
+
+@Service
+public class EmailServiceImpl implements EmailService {
+
+    @Autowired
+    private JavaMailSender eMailSender;
+
+    @Override
+    public void sendEmail(String to, String subject, String body) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setFrom("pranav1952000@gmail.com");  // Must match your SPRING_MAIL_USERNAME
+        message.setTo(to);
+        message.setSubject(subject);
+        message.setText(body);
+        eMailSender.send(message);
+    }
+
+    @Override
+    public void sendEmailWithHtml() {
+
+    }
+
+    @Override
+    public void sendEmailWithAttachment() {
+
+    }
+}
