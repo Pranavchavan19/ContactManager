@@ -15,7 +15,6 @@ import java.util.List;
 import java.util.UUID;
 
 @SpringBootApplication(scanBasePackages = "com.scm")
-@Import(com.scm.config.EmailConfig.class)
 public class Application  implements CommandLineRunner {
 
 	public static void main(String[] args) {

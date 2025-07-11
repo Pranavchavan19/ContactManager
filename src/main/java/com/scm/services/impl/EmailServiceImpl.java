@@ -11,7 +11,7 @@
 //@Service
 //public class EmailServiceImpl implements EmailService {
 //
-//    @Autowired(required = false)
+//    @Autowired()
 //    private JavaMailSender eMailSender;
 //
 //    @Value("${spring.mail.properties.domain_name}")
