@@ -1,42 +1,200 @@
+<!--<!DOCTYPE html>-->
+<!--<html-->
+<!--  lang="en"-->
+<!--  th:replace="~{base :: parent(~{::#content},~{::title},~{::script})}"-->
+<!--&gt;-->
+<!--  <head>-->
+<!--    <title data-th-text="${loggedInUser.name}+' |  SCM'">Profile Page</title>-->
+<!--  </head>-->
+<!--  <body>-->
+<!--    <div id="content">-->
+<!--      &lt;!&ndash; sidebar &ndash;&gt;-->
+
+<!--      &lt;!&ndash; user is logged in : sidebar &ndash;&gt;-->
+
+<!--      <div th:if="${loggedInUser}">-->
+<!--        <div data-th-replace="~{user/sidebar :: sidebar}"></div>-->
+<!--      </div>-->
+
+<!--      <div class="sm:pl-64 pt-20" style="height: 1000px">-->
+<!--        <div class="flex items-center justify-center md:pt-32 flex-col">-->
+<!--          &lt;!&ndash;  profie card &ndash;&gt;-->
+<!--          <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg max-w-2xl w-full">-->
+<!--            <div class="flex flex-col items-center">-->
+<!--                <img  src="https://res.cloudinary.com/dgolpgyl4/image/upload/v1744182976/a8ad1d21-6f26-4eab-bcaa-48c1e15fa876.jpg" alt="Profile Photo" class="w-44 h-44 rounded-full shadow-lg object-cover mb-4">-->
+<!--                <h2 class="text-2xl font-semibold mb-2" data-th-text=${loggedInUser.name}>User Name</h2>-->
+<!--                <p class="text-gray-600 mb-2 dark:text-gray-400" data-th-text="${loggedInUser.email}">user.email@example.com</p>-->
+<!--                <p class="text-gray-600 mb-2 dark:text-gray-400" data-th-text="${loggedInUser.phoneNumber}">123-456-7890</p>-->
+<!--                <p class="text-gray-600 mb-4 dark:text-gray-400 text-center" data-th-text="${loggedInUser.about}">About the user...</p>-->
+<!--                <div class="w-full flex justify-between">-->
+<!--                    <p class="text-1xl dark:text-gray-400 text-gray-500">Email Verified: <span class=" font-bold dark:text-white text-gray-700" id="email-verified" data-th-text="${loggedInUser.emailVerified ? 'YES'  :'NO'}">No</span></p>-->
+<!--                    <p class="text-1xl dark:text-gray-400 text-gray-500">Phone Verified: <span class="font-bold dark:text-white text-gray-700" id="phone-verified" data-th-text="${loggedInUser.phoneVerified ? 'YES':'NO'}">No</span></p>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
+
+<!--    <script>-->
+<!--      console.log("this is profile page");-->
+<!--    </script>-->
+<!--  </body>-->
+<!--</html>-->
+
+
+
 <!DOCTYPE html>
 <html
-  lang="en"
-  th:replace="~{base :: parent(~{::#content},~{::title},~{::script})}"
+        lang="en"
+        th:replace="~{base :: parent(~{::#content},~{::title},~{::script})}"
 >
-  <head>
+<head>
     <title data-th-text="${loggedInUser.name}+' |  SCM'">Profile Page</title>
-  </head>
-  <body>
-    <div id="content">
-      <!-- sidebar -->
 
-      <!-- user is logged in : sidebar -->
+    <style>
+        @media screen and (max-width: 768px) {
+          .sm\:pl-64 {
+            padding-left: 0 !important;
+          }
 
-      <div th:if="${loggedInUser}">
+          .pt-20 {
+            padding-top: 1rem !important;
+          }
+
+          .md\:pt-32 {
+            padding-top: 2rem !important;
+          }
+
+          .max-w-2xl {
+            max-width: 100% !important;
+          }
+
+          .card-wrapper {
+            padding: 1rem;
+          }
+
+          .w-full.flex.justify-between {
+            flex-direction: column;
+            gap: 0.5rem;
+            align-items: start;
+          }
+        }
+
+        @media screen and (max-width: 480px) {
+          .w-44 {
+            width: 7rem !important;
+            height: 7rem !important;
+          }
+
+          .text-2xl {
+            font-size: 1rem !important;
+          }
+
+          .text-1xl {
+            font-size: 0.875rem !important;
+          }
+
+          .p-6 {
+            padding: 0.85rem !important;
+          }
+
+          .mb-2,
+          .mb-4 {
+            margin-bottom: 0.5rem !important;
+          }
+
+          .card-wrapper {
+            padding: 1rem;
+          }
+
+          p,
+          h2,
+          span {
+            font-size: 0.875rem !important;
+          }
+        }
+
+        @media screen and (max-width: 350px) {
+          .w-44 {
+            width: 6rem !important;
+            height: 6rem !important;
+          }
+
+          .text-2xl {
+            font-size: 0.4rem !important;
+          }
+
+          .text-1xl {
+            font-size: 0.5rem !important;
+          }
+
+          .p-6 {
+            padding: 0.45rem !important;
+          }
+
+          .mb-2,
+          .mb-4 {
+            margin-bottom: 0.2rem !important;
+          }
+
+          .text-center {
+            text-align: center;
+          }
+
+          .card-wrapper {
+            padding: 0.75rem;
+          }
+
+          p,
+          h2,
+          span {
+            font-size: 0.5rem !important;
+          }
+        }
+    </style>
+
+
+</head>
+<body>
+<div id="content">
+    <!-- sidebar -->
+    <div th:if="${loggedInUser}">
         <div data-th-replace="~{user/sidebar :: sidebar}"></div>
-      </div>
+    </div>
 
-      <div class="sm:pl-64 pt-20" style="height: 1000px">
+    <div class="sm:pl-64 pt-20" style="height: 1000px">
         <div class="flex items-center justify-center md:pt-32 flex-col">
-          <!--  profie card -->
-          <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg max-w-2xl w-full">
-            <div class="flex flex-col items-center">
-                <img  src="https://res.cloudinary.com/dgolpgyl4/image/upload/v1744182976/a8ad1d21-6f26-4eab-bcaa-48c1e15fa876.jpg" alt="Profile Photo" class="w-44 h-44 rounded-full shadow-lg object-cover mb-4">
-                <h2 class="text-2xl font-semibold mb-2" data-th-text=${loggedInUser.name}>User Name</h2>
-                <p class="text-gray-600 mb-2 dark:text-gray-400" data-th-text="${loggedInUser.email}">user.email@example.com</p>
-                <p class="text-gray-600 mb-2 dark:text-gray-400" data-th-text="${loggedInUser.phoneNumber}">123-456-7890</p>
-                <p class="text-gray-600 mb-4 dark:text-gray-400 text-center" data-th-text="${loggedInUser.about}">About the user...</p>
-                <div class="w-full flex justify-between">
-                    <p class="text-1xl dark:text-gray-400 text-gray-500">Email Verified: <span class=" font-bold dark:text-white text-gray-700" id="email-verified" data-th-text="${loggedInUser.emailVerified ? 'YES'  :'NO'}">No</span></p>
-                    <p class="text-1xl dark:text-gray-400 text-gray-500">Phone Verified: <span class="font-bold dark:text-white text-gray-700" id="phone-verified" data-th-text="${loggedInUser.phoneVerified ? 'YES':'NO'}">No</span></p>
+            <!-- profile card -->
+            <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg max-w-2xl w-full">
+                <div class="flex flex-col items-center">
+                    <img
+                            src="https://res.cloudinary.com/dgolpgyl4/image/upload/v1744182976/a8ad1d21-6f26-4eab-bcaa-48c1e15fa876.jpg"
+                            alt="Profile Photo"
+                            class="w-44 h-44 rounded-full shadow-lg object-cover mb-4"
+                    />
+                    <h2 class="text-2xl font-semibold mb-2" data-th-text=${loggedInUser.name}>User Name</h2>
+                    <p class="text-gray-600 mb-2 dark:text-gray-400" data-th-text="${loggedInUser.email}">user.email@example.com</p>
+                    <p class="text-gray-600 mb-2 dark:text-gray-400" data-th-text="${loggedInUser.phoneNumber}">123-456-7890</p>
+                    <p class="text-gray-600 mb-4 dark:text-gray-400 text-center" data-th-text="${loggedInUser.about}">About the user...</p>
+                    <div class="w-full flex justify-between">
+                        <p class="text-1xl dark:text-gray-400 text-gray-500">
+                            Email Verified:
+                            <span class="font-bold dark:text-white text-gray-700" id="email-verified" data-th-text="${loggedInUser.emailVerified ? 'YES'  :'NO'}">No</span>
+                        </p>
+                        <p class="text-1xl dark:text-gray-400 text-gray-500">
+                            Phone Verified:
+                            <span class="font-bold dark:text-white text-gray-700" id="phone-verified" data-th-text="${loggedInUser.phoneVerified ? 'YES':'NO'}">No</span>
+                        </p>
+                    </div>
                 </div>
             </div>
         </div>
-      </div>
     </div>
+</div>
 
-    <script>
-      console.log("this is profile page");
-    </script>
-  </body>
+<script>
+    console.log("this is profile page");
+</script>
+</body>
 </html>
+
