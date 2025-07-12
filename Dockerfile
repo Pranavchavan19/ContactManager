@@ -12,11 +12,13 @@ RUN npx tailwindcss -i ./src/main/resources/static/css/input.css -o ./src/main/r
 
 # === Stage 2: Build Spring Boot JAR ===
 FROM maven:3.9.6-eclipse-temurin AS maven-builder
-# ✅ Valid image: https://hub.docker.com/_/maven
 
 WORKDIR /app
 
 COPY . .
+
+# ✅ Make mvnw executable
+RUN chmod +x ./mvnw
 
 RUN ./mvnw clean package -DskipTests
 
