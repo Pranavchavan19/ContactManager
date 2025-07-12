@@ -1,8 +1,0 @@
-target/
-node_modules/
-*.log
-*.iml
-.idea/
-.DS_Store
-.git/
-.m2/        <-- ADD THIS LINE
