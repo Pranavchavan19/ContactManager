@@ -1,34 +1,41 @@
-# ========== STEP 1: Build Tailwind CSS ==========
-FROM node:20-alpine AS tailwind
+# === Stage 1: Node + Tailwind ===
+FROM node:20-alpine AS tailwind-builder
 
+# Set workdir
 WORKDIR /app
 
-# Copy only what's needed to build CSS
+# Copy Tailwind config and input files
 COPY package.json tailwind.config.js ./
-COPY src ./src
+COPY src/main/resources/static/css ./src/main/resources/static/css
 
+# Install Tailwind
 RUN npm install
+
+# Build CSS
 RUN npx tailwindcss -i ./src/main/resources/static/css/input.css -o ./src/main/resources/static/css/output.css --minify
 
-# ========== STEP 2: Build Spring Boot ==========
-FROM maven:3.9.6-eclipse-temurin-20-alpine AS build
+# === Stage 2: Maven Build ===
+FROM maven:3.9.6-eclipse-temurin-20 AS maven-builder
 
 WORKDIR /app
-COPY pom.xml ./
-COPY src ./src
 
-RUN mvn clean package -DskipTests
+# Copy all code and .mvn wrapper
+COPY . .
 
-# ========== STEP 3: Final Runtime ==========
+# Build Spring Boot JAR
+RUN ./mvnw clean package -DskipTests
+
+# === Final Stage: Run the JAR ===
 FROM eclipse-temurin:20-jdk
 
 WORKDIR /app
 
-# Copy final JAR
-COPY --from=build /app/target/*.jar app.jar
+# Copy JAR from Maven build
+COPY --from=maven-builder /app/target/*.jar app.jar
 
-# 🔥 Copy freshly built Tailwind output.css
-COPY --from=tailwind /app/src/main/resources/static/css/output.css ./src/main/resources/static/css/output.css
+# Copy CSS output from Tailwind build
+COPY --from=tailwind-builder /app/src/main/resources/static/css/output.css /app/static/css/output.css
 
 EXPOSE 8080
+
 ENTRYPOINT ["java", "-jar", "app.jar"]
