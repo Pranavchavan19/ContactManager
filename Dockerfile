@@ -1,19 +1,25 @@
-# ========== Stage 1: Build the JAR ==========
+# ========== Stage 1: Build JAR + Tailwind ==========
 FROM eclipse-temurin:21 AS maven-builder
 
 WORKDIR /app
 
-# Copy project files
+# Install Node.js and npm (required for Tailwind)
+RUN apt-get update && apt-get install -y curl gnupg && \
+    curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
+    apt-get install -y nodejs && \
+    npm install -g npm@latest
+
+# Copy all project files
 COPY . .
 
-# Give permission to Maven wrapper if needed
+# Make Maven wrapper executable
 RUN chmod +x mvnw
 
-# Generate latest Tailwind CSS
+# Install Tailwind CSS and generate output.css
 RUN npm install -D tailwindcss postcss autoprefixer && \
     npx tailwindcss -i ./src/main/resources/static/input.css -o ./src/main/resources/static/output.css --minify
 
-# Clean and package the Spring Boot app (skip tests for faster builds)
+# Build the Spring Boot app
 RUN ./mvnw clean package -DskipTests
 
 
@@ -22,7 +28,6 @@ FROM eclipse-temurin:21-jre
 
 WORKDIR /app
 
-# Copy the JAR from the builder stage
 COPY --from=maven-builder /app/target/*.jar app.jar
 
 EXPOSE 8080
