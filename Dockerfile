@@ -1,9 +1,9 @@
-# Use JDK 20
-FROM openjdk:20
+# 🌱 Stage 1: Build Tailwind CSS and Spring Boot JAR
+FROM eclipse-temurin:20-jdk-jammy as builder
 
-# Install Node.js (needed for Tailwind CSS)
+# Install curl, node, npm (needed for Tailwind)
 RUN apt-get update && \
-    apt-get install -y curl && \
+    apt-get install -y curl gnupg && \
     curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
     apt-get install -y nodejs && \
     npm install -g npm
@@ -11,18 +11,25 @@ RUN apt-get update && \
 # Set working directory
 WORKDIR /app
 
-# Copy entire repo
+# Copy all project files
 COPY . .
 
-# Install Tailwind and build output.css
-RUN npm install -D tailwindcss && \
-    npx tailwindcss -i ./src/main/resources/static/css/input.css -o ./src/main/resources/static/css/output.css --minify
+# Install Tailwind
+RUN npm install -D tailwindcss
 
-# Build Spring Boot JAR using Maven wrapper
+# Build Tailwind CSS
+RUN npx tailwindcss -i ./src/main/resources/static/css/input.css -o ./src/main/resources/static/css/output.css --minify
+
+# Build Spring Boot JAR
 RUN ./mvnw clean package -DskipTests
 
-# Expose port 8080
+# 🏁 Stage 2: Run app in slim image
+FROM eclipse-temurin:20-jdk-jammy
+
+WORKDIR /app
+
+COPY --from=builder /app/target/*.jar ./app.jar
+
 EXPOSE 8080
 
-# Run the jar
-ENTRYPOINT ["java", "-jar", "target/scm2.0-0.0.1-SNAPSHOT.jar"]
+ENTRYPOINT ["java", "-jar", "app.jar"]
