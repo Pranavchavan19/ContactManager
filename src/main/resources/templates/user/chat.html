@@ -242,6 +242,14 @@
 <head>
   <title id="title">Chat</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+
+  <!-- Load your CSS here -->
+  <link rel="stylesheet" th:href="@{/css/style.css(v=${T(java.lang.System).currentTimeMillis()})}">
+  <link rel="stylesheet" th:href="@{/css/output.css(v=${T(java.lang.System).currentTimeMillis()})}">
+  <link rel="stylesheet" th:href="@{/css/input.css(v=${T(java.lang.System).currentTimeMillis()})}">
+
+
   <style>
     .hide-scrollbar {
       scrollbar-width: none;
