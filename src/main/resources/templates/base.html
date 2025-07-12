@@ -14,8 +14,14 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css"
       rel="stylesheet"
     />
-    <link rel="stylesheet" data-th-href="@{'/css/output.css'}" />
-    <link rel="stylesheet" data-th-href="@{'/css/style.css'}" />
+
+    <!-- 🟢 Use cache-busting to force updated CSS load -->
+    <link rel="stylesheet" th:href="@{/css/output.css(v=${T(java.lang.System).currentTimeMillis()})}" />
+    <link rel="stylesheet" th:href="@{/css/style.css(v=${T(java.lang.System).currentTimeMillis()})}" />
+
+
+<!--    <link rel="stylesheet" data-th-href="@{'/css/output.css'}" />-->
+<!--    <link rel="stylesheet" data-th-href="@{'/css/style.css'}" />-->
 
     <!-- font awesome -->
     <link
