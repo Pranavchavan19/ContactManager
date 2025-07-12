@@ -1,29 +1,36 @@
-# 🌱 Stage 1: Build Tailwind CSS and Spring Boot JAR
-FROM eclipse-temurin:20-jdk-jammy as builder
-
-RUN apt-get update && \
-    apt-get install -y curl gnupg && \
-    curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
-    apt-get install -y nodejs && \
-    npm install -g npm
+# -------------------
+# Stage 1: Tailwind CSS build
+# -------------------
+FROM node:20-alpine AS tailwind
 
 WORKDIR /app
 
-COPY . .
+# Install Tailwind dependencies
+COPY package.json package-lock.json* ./
+RUN npm install
 
-RUN npm install -D tailwindcss
+# Copy Tailwind config and project source
+COPY tailwind.config.js ./
+COPY src ./src
 
-# ✅ Add execute permission to tailwind binary
-RUN chmod +x node_modules/.bin/tailwindcss
+# Build Tailwind CSS
+RUN npm run build:css
 
-# ✅ Now build CSS
-RUN npx tailwindcss -i ./src/main/resources/static/css/input.css -o ./src/main/resources/static/css/output.css --minify
+# -------------------
+# Stage 2: Spring Boot app build and run
+# -------------------
+FROM eclipse-temurin:20-jdk
 
-RUN ./mvnw clean package -DskipTests
-
-# 🏁 Final runtime image
-FROM eclipse-temurin:20-jdk-jammy
 WORKDIR /app
-COPY --from=builder /app/target/*.jar ./app.jar
+
+# Copy built JAR file
+COPY dist/scm2.0-0.0.1-SNAPSHOT.jar .
+
+# Copy compiled Tailwind CSS from previous stage
+COPY --from=tailwind /app/src/main/resources/static/css/output.css ./src/main/resources/static/css/output.css
+
+# Expose port
 EXPOSE 8080
-ENTRYPOINT ["java", "-jar", "app.jar"]
+
+# Run the app
+ENTRYPOINT ["java", "-jar", "scm2.0-0.0.1-SNAPSHOT.jar"]
