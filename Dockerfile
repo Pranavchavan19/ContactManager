@@ -1,36 +1,29 @@
-# -------------------
-# Stage 1: Tailwind CSS build
-# -------------------
-FROM node:20-alpine AS tailwind
+# 1️⃣ Base image with Node to build Tailwind CSS
+FROM node:20-alpine AS tailwind-builder
 
-WORKDIR /app
+WORKDIR /build
 
 # Install Tailwind dependencies
-COPY package.json package-lock.json* ./
+COPY package.json ./
+COPY tailwind.config.js ./
 RUN npm install
 
-# Copy Tailwind config and project source
-COPY tailwind.config.js ./
+# Copy source files
 COPY src ./src
 
 # Build Tailwind CSS
-RUN npm run build:css
+RUN npx tailwindcss -i ./src/main/resources/static/css/input.css -o ./src/main/resources/static/css/output.css --minify
 
-# -------------------
-# Stage 2: Spring Boot app build and run
-# -------------------
+# 2️⃣ Final image for Spring Boot
 FROM eclipse-temurin:20-jdk
 
 WORKDIR /app
 
-# Copy built JAR file
-COPY dist/scm2.0-0.0.1-SNAPSHOT.jar .
+# Copy Spring Boot JAR
+COPY dist/scm2.0-0.0.1-SNAPSHOT.jar app.jar
 
-# Copy compiled Tailwind CSS from previous stage
-COPY --from=tailwind /app/src/main/resources/static/css/output.css ./src/main/resources/static/css/output.css
+# Copy Tailwind CSS output from previous stage
+COPY --from=tailwind-builder /build/src/main/resources/static/css/output.css ./src/main/resources/static/css/output.css
 
-# Expose port
 EXPOSE 8080
-
-# Run the app
-ENTRYPOINT ["java", "-jar", "scm2.0-0.0.1-SNAPSHOT.jar"]
+ENTRYPOINT ["java", "-jar", "app.jar"]
