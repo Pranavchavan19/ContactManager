@@ -5,3 +5,4 @@ node_modules/
 .idea/
 .DS_Store
 .git/
+.m2/        <-- ADD THIS LINE
