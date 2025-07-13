@@ -73,10 +73,23 @@ async function loadContactdata(id) {
 
 async function deleteContact(id) {
   Swal.fire({
+//    title: "Do you want to delete the contact?",
+//    icon: "warning",
+//    showCancelButton: true,
+//    confirmButtonText: "Delete",
+
+
     title: "Do you want to delete the contact?",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonText: "Delete",
+  icon: "warning",
+  iconColor: "#f1c40f",             // custom icon color
+  showCancelButton: true,
+  confirmButtonText: "Delete",
+  confirmButtonColor: "#e74c3c",    // red button
+  cancelButtonColor: "#95a5a6",     // grey cancel
+  background: "#6b21a8",            // light yellow background
+  color: "#333",                    // text color
+
+
   }).then((result) => {
     /* Read more about isConfirmed, isDenied below */
     if (result.isConfirmed) {

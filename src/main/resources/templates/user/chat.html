@@ -248,84 +248,133 @@
 <!--</html>-->
 
 
-<!DOCTYPE html>
-<html lang="en" th:replace="~{base :: parent(~{::#content}, ~{::title}, ~{::#script})}">
-<head>
-  <title id="title">Chat</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-
-<!--  &lt;!&ndash; Load your CSS here &ndash;&gt;-->
-<!--  <link rel="stylesheet" th:href="@{/css/style.css(v=${T(java.lang.System).currentTimeMillis()})}">-->
-<!--  <link rel="stylesheet" th:href="@{/css/output.css(v=${T(java.lang.System).currentTimeMillis()})}">-->
-<!--  <link rel="stylesheet" th:href="@{/css/input.css(v=${T(java.lang.System).currentTimeMillis()})}">-->
-
-
-  <style>
-    .hide-scrollbar {
-      scrollbar-width: none;
-      -ms-overflow-style: none;
-    }
-    .hide-scrollbar::-webkit-scrollbar {
-      display: none;
-    }
-    @media (min-width: 1024px) {
-      .mobile-contact-panel {
-        transform: translateX(0) !important;
-        position: relative !important;
-        z-index: auto !important;
-      }
-    }
-  </style>
-</head>
-<body class="bg-yellow-500 font-sans">
-
-<div id="content" class="w-full min-h-screen flex flex-col p-4">
-  <div class="w-full max-w-6xl mx-auto flex flex-col lg:flex-row bg-purple-900 rounded-2xl overflow-hidden shadow-2xl relative flex-grow">
-
-    <!-- Mobile Header -->
-    <div class="lg:hidden flex justify-between items-center bg-purple-700 text-white px-4  py-3">
-      <h2 class="text-base">Chat with <span th:text="${toUserName}" class="font-bold text-red-300"></span></h2>
-      <button onclick="openContacts()" class="text-2xl">☰</button>
-    </div>
-
-    <!-- Overlay -->
-    <div id="overlay"
-         class="fixed inset-0 bg-black bg-opacity-40 z-40 lg:hidden hidden"
-         onclick="closeContacts()"></div>
-
-    <!-- Contact Panel -->
-    <div id="contactPanel"
-         class="mobile-contact-panel fixed lg:static z-50 lg:z-0 inset-y-0 left-0 w-3/4 sm:w-1/2 lg:w-1/3 bg-purple-600 text-white p-4 overflow-y-auto hide-scrollbar transform -translate-x-full transition-transform duration-300 ease-in-out">
-<!--    class="mobile-contact-panel fixed lg:static z-50 lg:z-0 inset-y-0 left-0 w-3/4 sm:w-1/2 lg:w-1/3 bg-purple-600 text-white p-4 overflow-y-auto hide-scrollbar transform lg:transform-none -translate-x-full transition-transform duration-300 ease-in-out"-->
-
-    <div class="flex justify-between items-center mb-3">
-        <span class="text-lg font-semibold">Contacts</span>
-        <button onclick="closeContacts()" class="text-white text-3xl lg:hidden">&times;</button>
-      </div>
-      <ul class="space-y-1">
-        <li th:each="contact : ${contacts}">
-          <a data-th-href="@{'/user/chat/' + ${contact.email}}"
-             data-th-text="${contact.name}"
-             class="block px-3 py-2 rounded hover:bg-purple-500 transition duration-200"
-             onclick="closeContacts()"></a>
-        </li>
-      </ul>
-    </div>
+<!--<!DOCTYPE html>-->
+<!--<html lang="en" th:replace="~{base :: parent(~{::#content}, ~{::title}, ~{::#script})}">-->
+<!--<head>-->
+<!--  <title id="title">Chat</title>-->
+<!--  <meta name="viewport" content="width=device-width, initial-scale=1.0" />-->
 
 
 
-<!--    <div th:if="${toUser != null}" class="flex-1 flex flex-col bg-gray-800">-->
+<!--  <style>-->
+<!--    .hide-scrollbar {-->
+<!--      scrollbar-width: none;-->
+<!--      -ms-overflow-style: none;-->
+<!--    }-->
+<!--    .hide-scrollbar::-webkit-scrollbar {-->
+<!--      display: none;-->
+<!--    }-->
+<!--    @media (min-width: 1024px) {-->
+<!--      .mobile-contact-panel {-->
+<!--        transform: translateX(0) !important;-->
+<!--        position: relative !important;-->
+<!--        z-index: auto !important;-->
+<!--      }-->
+<!--    }-->
+<!--  </style>-->
+<!--</head>-->
+<!--<body class="bg-yellow-500 font-sans">-->
+
+<!--<div id="content" class="w-full min-h-screen flex flex-col p-4">-->
+<!--  <div class="w-full max-w-6xl mx-auto flex flex-col lg:flex-row bg-purple-900 rounded-2xl overflow-hidden shadow-2xl relative flex-grow">-->
+
+<!--    &lt;!&ndash; Mobile Header &ndash;&gt;-->
+<!--    <div class="lg:hidden flex justify-between items-center bg-purple-700 text-white px-4  py-3">-->
+<!--      <h2 class="text-base">Chat with <span th:text="${toUserName}" class="font-bold text-red-300"></span></h2>-->
+<!--      <button onclick="openContacts()" class="text-2xl">☰</button>-->
+<!--    </div>-->
+
+<!--    &lt;!&ndash; Overlay &ndash;&gt;-->
+<!--    <div id="overlay"-->
+<!--         class="fixed inset-0 bg-black bg-opacity-40 z-40 lg:hidden hidden"-->
+<!--         onclick="closeContacts()"></div>-->
+
+<!--    &lt;!&ndash; Contact Panel &ndash;&gt;-->
+<!--    <div id="contactPanel"-->
+<!--         class="mobile-contact-panel fixed lg:static z-50 lg:z-0 inset-y-0 left-0 w-3/4 sm:w-1/2 lg:w-1/3 bg-purple-600 text-white p-4 overflow-y-auto hide-scrollbar transform -translate-x-full transition-transform duration-300 ease-in-out">-->
+<!--&lt;!&ndash;    class="mobile-contact-panel fixed lg:static z-50 lg:z-0 inset-y-0 left-0 w-3/4 sm:w-1/2 lg:w-1/3 bg-purple-600 text-white p-4 overflow-y-auto hide-scrollbar transform lg:transform-none -translate-x-full transition-transform duration-300 ease-in-out"&ndash;&gt;-->
+
+<!--    <div class="flex justify-between items-center mb-3">-->
+<!--        <span class="text-lg font-semibold">Contacts</span>-->
+<!--        <button onclick="closeContacts()" class="text-white text-3xl lg:hidden">&times;</button>-->
+<!--      </div>-->
+<!--      <ul class="space-y-1">-->
+<!--        <li th:each="contact : ${contacts}">-->
+<!--          <a data-th-href="@{'/user/chat/' + ${contact.email}}"-->
+<!--             data-th-text="${contact.name}"-->
+<!--             class="block px-3 py-2 rounded hover:bg-purple-500 transition duration-200"-->
+<!--             onclick="closeContacts()"></a>-->
+<!--        </li>-->
+<!--      </ul>-->
+<!--    </div>-->
+
+
+
+<!--&lt;!&ndash;    <div th:if="${toUser != null}" class="flex-1 flex flex-col bg-gray-800">&ndash;&gt;-->
+<!--&lt;!&ndash;      &lt;!&ndash; Desktop Header &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;      <h1 class="hidden lg:block text-4xl font-bold text-center mt-4 text-white">💬 Direct Messages</h1>&ndash;&gt;-->
+
+<!--&lt;!&ndash;      <div class="hidden lg:block bg-purple-700 text-white   px-5 py-3">&ndash;&gt;-->
+<!--&lt;!&ndash;        <h2 class="text-lg font-thin">Chat with <span th:text="${toUserName}" class="text-red-300 font-bold"></span></h2>&ndash;&gt;-->
+<!--&lt;!&ndash;      </div>&ndash;&gt;-->
+
+<!--&lt;!&ndash;      &lt;!&ndash; Messages &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;      <div class="flex-1 overflow-y-auto p-4 space-y-3 hide-scrollbar">&ndash;&gt;-->
+<!--&lt;!&ndash;        <div th:each="msg : ${messages}">&ndash;&gt;-->
+<!--&lt;!&ndash;          <div th:if="${msg.fromUser == toUser}" class="flex items-start gap-2">&ndash;&gt;-->
+<!--&lt;!&ndash;            <div class="bg-gray-700 px-2 py-2 rounded-lg shadow max-w-xs">&ndash;&gt;-->
+<!--&lt;!&ndash;              <p class="text-white" th:text="${msg.content}"></p>&ndash;&gt;-->
+<!--&lt;!&ndash;              <span th:text="${#temporals.format(msg.timestamp, 'dd MMM yyyy, hh:mm a')}"&ndash;&gt;-->
+<!--&lt;!&ndash;                    class="block text-xs text-white mt-1 text-right"></span>&ndash;&gt;-->
+<!--&lt;!&ndash;            </div>&ndash;&gt;-->
+<!--&lt;!&ndash;          </div>&ndash;&gt;-->
+<!--&lt;!&ndash;          <div th:if="${msg.fromUser != toUser}" class="flex justify-end items-start gap-2">&ndash;&gt;-->
+<!--&lt;!&ndash;            <div class="bg-green-800 text-white px-2 py-2 rounded-lg shadow max-w-xs">&ndash;&gt;-->
+<!--&lt;!&ndash;              <p th:text="${msg.content}"></p>&ndash;&gt;-->
+<!--&lt;!&ndash;              <span th:text="${#temporals.format(msg.timestamp, 'dd MMM yyyy, hh:mm a')}"&ndash;&gt;-->
+<!--&lt;!&ndash;                    class="block text-xs text-green-100 mt-1 text-right"></span>&ndash;&gt;-->
+<!--&lt;!&ndash;            </div>&ndash;&gt;-->
+<!--&lt;!&ndash;          </div>&ndash;&gt;-->
+<!--&lt;!&ndash;        </div>&ndash;&gt;-->
+<!--&lt;!&ndash;      </div>&ndash;&gt;-->
+
+<!--&lt;!&ndash;      &lt;!&ndash; Message Input &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;      <form method="post" action="/user/chat/send"&ndash;&gt;-->
+<!--&lt;!&ndash;            class="px-6 py-2 bg-gray-800 flex flex-wrap sm:flex-nowrap gap-3 items-center">&ndash;&gt;-->
+<!--&lt;!&ndash;        <input type="hidden" name="toUser" th:value="${toUser}" />&ndash;&gt;-->
+
+<!--&lt;!&ndash;        <input&ndash;&gt;-->
+<!--&lt;!&ndash;                type="text"&ndash;&gt;-->
+<!--&lt;!&ndash;                name="content"&ndash;&gt;-->
+<!--&lt;!&ndash;                placeholder="Type a message..."&ndash;&gt;-->
+<!--&lt;!&ndash;                class="flex-1 min-w-0 px-4 py-2 rounded-full bg-purple-700 text-green-700 border border-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500"&ndash;&gt;-->
+
+<!--&lt;!&ndash;                required&ndash;&gt;-->
+<!--&lt;!&ndash;        />&ndash;&gt;-->
+
+<!--&lt;!&ndash;        <button&ndash;&gt;-->
+<!--&lt;!&ndash;                type="submit"&ndash;&gt;-->
+<!--&lt;!&ndash;                class="px-5 py-2 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-full whitespace-nowrap transition"&ndash;&gt;-->
+<!--&lt;!&ndash;        >&ndash;&gt;-->
+<!--&lt;!&ndash;          Send&ndash;&gt;-->
+<!--&lt;!&ndash;        </button>&ndash;&gt;-->
+<!--&lt;!&ndash;      </form>&ndash;&gt;-->
+<!--&lt;!&ndash;    </div>&ndash;&gt;-->
+
+<!--    <div class="flex-1 flex flex-col bg-gray-800">-->
 <!--      &lt;!&ndash; Desktop Header &ndash;&gt;-->
 <!--      <h1 class="hidden lg:block text-4xl font-bold text-center mt-4 text-white">💬 Direct Messages</h1>-->
 
-<!--      <div class="hidden lg:block bg-purple-700 text-white   px-5 py-3">-->
-<!--        <h2 class="text-lg font-thin">Chat with <span th:text="${toUserName}" class="text-red-300 font-bold"></span></h2>-->
+<!--      <div class="hidden lg:block bg-purple-700 text-white px-5 py-3">-->
+<!--        <h2 class="text-lg font-thin">-->
+<!--          Chat with <span th:text="${toUserName}" class="text-red-300 font-bold">No User</span>-->
+<!--        </h2>-->
 <!--      </div>-->
 
 <!--      &lt;!&ndash; Messages &ndash;&gt;-->
 <!--      <div class="flex-1 overflow-y-auto p-4 space-y-3 hide-scrollbar">-->
-<!--        <div th:each="msg : ${messages}">-->
+<!--        <div th:if="${toUser != null}" th:each="msg : ${messages}">-->
+<!--          &lt;!&ndash; incoming message &ndash;&gt;-->
 <!--          <div th:if="${msg.fromUser == toUser}" class="flex items-start gap-2">-->
 <!--            <div class="bg-gray-700 px-2 py-2 rounded-lg shadow max-w-xs">-->
 <!--              <p class="text-white" th:text="${msg.content}"></p>-->
@@ -333,6 +382,8 @@
 <!--                    class="block text-xs text-white mt-1 text-right"></span>-->
 <!--            </div>-->
 <!--          </div>-->
+
+<!--          &lt;!&ndash; outgoing message &ndash;&gt;-->
 <!--          <div th:if="${msg.fromUser != toUser}" class="flex justify-end items-start gap-2">-->
 <!--            <div class="bg-green-800 text-white px-2 py-2 rounded-lg shadow max-w-xs">-->
 <!--              <p th:text="${msg.content}"></p>-->
@@ -341,22 +392,23 @@
 <!--            </div>-->
 <!--          </div>-->
 <!--        </div>-->
+
+<!--        <div th:if="${toUser == null}" class="text-center text-white text-lg mt-10">-->
+<!--          👈 Please select a contact to start chatting.-->
+<!--        </div>-->
 <!--      </div>-->
 
 <!--      &lt;!&ndash; Message Input &ndash;&gt;-->
-<!--      <form method="post" action="/user/chat/send"-->
+<!--      <form th:if="${toUser != null}" method="post" action="/user/chat/send"-->
 <!--            class="px-6 py-2 bg-gray-800 flex flex-wrap sm:flex-nowrap gap-3 items-center">-->
 <!--        <input type="hidden" name="toUser" th:value="${toUser}" />-->
-
 <!--        <input-->
 <!--                type="text"-->
 <!--                name="content"-->
 <!--                placeholder="Type a message..."-->
 <!--                class="flex-1 min-w-0 px-4 py-2 rounded-full bg-purple-700 text-green-700 border border-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500"-->
-
 <!--                required-->
 <!--        />-->
-
 <!--        <button-->
 <!--                type="submit"-->
 <!--                class="px-5 py-2 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-full whitespace-nowrap transition"-->
@@ -366,7 +418,89 @@
 <!--      </form>-->
 <!--    </div>-->
 
-    <div class="flex-1 flex flex-col bg-gray-800">
+
+<!--  </div>-->
+
+<!--&lt;!&ndash; Script &ndash;&gt;-->
+<!--<div id="script" th:fragment="script">-->
+<!--  <script>-->
+<!--    function openContacts() {-->
+<!--      document.getElementById('contactPanel').classList.remove('-translate-x-full');-->
+<!--      document.getElementById('contactPanel').classList.add('translate-x-0');-->
+<!--      document.getElementById('overlay').classList.remove('hidden');-->
+<!--    }-->
+
+<!--    function closeContacts() {-->
+<!--      document.getElementById('contactPanel').classList.add('-translate-x-full');-->
+<!--      document.getElementById('contactPanel').classList.remove('translate-x-0');-->
+<!--      document.getElementById('overlay').classList.add('hidden');-->
+<!--    }-->
+<!--  </script>-->
+<!--</div>-->
+<!--</body>-->
+<!--</html>-->
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en" th:replace="~{base :: parent(~{::#content}, ~{::title}, ~{::#script})}">
+<head>
+  <title id="title">Chat</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    .hide-scrollbar {
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+    .hide-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+
+    @media (min-width: 1024px) {
+      .mobile-contact-panel {
+        transform: translateX(0) !important;
+        position: relative !important;
+        z-index: auto !important;
+      }
+    }
+  </style>
+</head>
+
+<body class="bg-yellow-500 font-sans">
+
+<div id="content" class=" mt-4 p-4 rounded-xl">
+  <div class="   rounded-xl">
+
+    <!-- Mobile Header -->
+    <div class="lg:hidden flex justify-between items-center bg-purple-700 text-white px-4 py-3 rounded-full">
+      <h2 class="text-base">Chat with <span th:text="${toUserName}" class="font-bold text-red-300"></span></h2>
+      <button onclick="openContacts()" class="text-2xl">☰</button>
+    </div>
+
+    <!-- Overlay for mobile -->
+    <div id="overlay" class="fixed inset-0 bg-black bg-opacity-40 z-40 lg:hidden hidden" onclick="closeContacts()"></div>
+
+    <!-- Contact Panel -->
+    <div id="contactPanel"
+         class="mobile-contact-panel fixed lg:static z-50  lg:z-auto inset-y-0 left-0 w-3/4 sm:w-1/2 lg:w-1/3 bg-purple-600 text-white p-4 overflow-y-auto hide-scrollbar transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out">
+      <div class="flex justify-between items-center mb-3">
+        <span class="text-lg font-semibold">Contacts</span>
+        <button onclick="closeContacts()" class="text-white text-3xl ">&times;</button>
+      </div>
+      <ul class="space-y-1">
+        <li th:each="contact : ${contacts}">
+          <a data-th-href="@{'/user/chat/' + ${contact.name}}"
+             data-th-text="${contact.name}"
+             class="block px-3 py-2 rounded hover:bg-purple-500 transition duration-200"
+             onclick="closeContacts()"></a>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Chat Area -->
+    <div class="flex-1 flex flex-col bg-gray-800 rounded-lg mt-4">
       <!-- Desktop Header -->
       <h1 class="hidden lg:block text-4xl font-bold text-center mt-4 text-white">💬 Direct Messages</h1>
 
@@ -379,7 +513,7 @@
       <!-- Messages -->
       <div class="flex-1 overflow-y-auto p-4 space-y-3 hide-scrollbar">
         <div th:if="${toUser != null}" th:each="msg : ${messages}">
-          <!-- incoming message -->
+          <!-- Incoming -->
           <div th:if="${msg.fromUser == toUser}" class="flex items-start gap-2">
             <div class="bg-gray-700 px-2 py-2 rounded-lg shadow max-w-xs">
               <p class="text-white" th:text="${msg.content}"></p>
@@ -387,17 +521,20 @@
                     class="block text-xs text-white mt-1 text-right"></span>
             </div>
           </div>
-
-          <!-- outgoing message -->
+          <!-- Outgoing -->
           <div th:if="${msg.fromUser != toUser}" class="flex justify-end items-start gap-2">
             <div class="bg-green-800 text-white px-2 py-2 rounded-lg shadow max-w-xs">
               <p th:text="${msg.content}"></p>
+              <!-- <span th:text="${#temporals.format(msg.timestamp, 'dd MMM yyyy, hh:mm a')}"
+                    class="block text-xs text-green-100 mt-1 text-right"></span> -->
               <span th:text="${#temporals.format(msg.timestamp, 'dd MMM yyyy, hh:mm a')}"
-                    class="block text-xs text-green-100 mt-1 text-right"></span>
+                    class="block text-xs text-white mt-1 text-right"></span>
+
             </div>
           </div>
         </div>
 
+        <!-- No Chat Yet -->
         <div th:if="${toUser == null}" class="text-center text-white text-lg mt-10">
           👈 Please select a contact to start chatting.
         </div>
@@ -405,13 +542,13 @@
 
       <!-- Message Input -->
       <form th:if="${toUser != null}" method="post" action="/user/chat/send"
-            class="px-6 py-2 bg-gray-800 flex flex-wrap sm:flex-nowrap gap-3 items-center">
+            class="px-6 py-2 bg-gray-800 flex flex-wrap sm:flex-nowrap gap-3 items-center rounded-lg">
         <input type="hidden" name="toUser" th:value="${toUser}" />
         <input
                 type="text"
                 name="content"
                 placeholder="Type a message..."
-                class="flex-1 min-w-0 px-4 py-2 rounded-full bg-purple-700 text-green-700 border border-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500"
+                class="flex-1 min-w-0 px-4 py-2 rounded-full bg-purple-700 text-white border border-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500"
                 required
         />
         <button
@@ -423,10 +560,10 @@
       </form>
     </div>
 
-
   </div>
+</div>
 
-<!-- Script -->
+<!-- Scripts -->
 <div id="script" th:fragment="script">
   <script>
     function openContacts() {
@@ -444,6 +581,4 @@
 </div>
 </body>
 </html>
-
-
 
