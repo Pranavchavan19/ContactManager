@@ -93,7 +93,7 @@ async function deleteContact(id) {
   }).then((result) => {
     /* Read more about isConfirmed, isDenied below */
     if (result.isConfirmed) {
-      const url = `${baseURL}/user/contacts/delete/` + id;
+      const url = `${baseUrl}/user/contacts/delete/` + id;
       window.location.replace(url);
     }
   });
