@@ -1,6 +1,6 @@
 console.log("Contacts.js");
-const baseURL = "http://localhost:8081";
-// const baseURL = "https://www.scm20.site";
+//const baseUrl = "http://localhost:8081";
+ const baseUrl = "https://contactmanager-2lcv.onrender.com";
 const viewContactModal = document.getElementById("view_contact_modal");
 
 // options with default values
@@ -41,8 +41,9 @@ function closeContactModal() {
 async function loadContactdata(id) {
   //function call to load data
   console.log(id);
+  console.log(baseUrl);
   try {
-    const data = await (await fetch(`${baseURL}/api/contacts/${id}`)).json();
+    const data = await (await fetch(`${baseUrl}/api/contacts/${id}`)).json();
     console.log(data);
     
     document.querySelector("#contact_name").innerHTML = data.name;
@@ -70,7 +71,6 @@ async function loadContactdata(id) {
 }
 
 // delete contact
-
 async function deleteContact(id) {
   Swal.fire({
 //    title: "Do you want to delete the contact?",
