@@ -48,7 +48,6 @@ public class ContactController {
     // add contact page: handler
     public String addContactView(Model model) {
         ContactForm contactForm = new ContactForm();
-
         contactForm.setFavorite(true);
         model.addAttribute("contactForm", contactForm);
         return "user/add_contact";

@@ -119,6 +119,8 @@ import jakarta.persistence.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
+
+import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -161,6 +163,7 @@ public class User implements UserDetails {
     @ElementCollection(fetch = FetchType.EAGER)
     private List<String> roleList = new ArrayList<>();
 
+    @Getter
     private String emailToken;
 
     // No-arg constructor
@@ -299,10 +302,6 @@ public class User implements UserDetails {
 
     public void setRoleList(List<String> roleList) {
         this.roleList = roleList;
-    }
-
-    public String getEmailToken() {
-        return emailToken;
     }
 
     public void setEmailToken(String emailToken) {
