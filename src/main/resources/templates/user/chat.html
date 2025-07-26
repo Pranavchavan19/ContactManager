@@ -247,6 +247,19 @@
 <!--</html>-->
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
 <!--<!DOCTYPE html>-->
 <!--<html lang="en" th:replace="~{base :: parent(~{::#content}, ~{::title}, ~{::#script})}">-->
 <!--<head>-->
@@ -441,8 +454,7 @@
 
 
 <!DOCTYPE html>
-<html lang="en" th:replace="~{base :: parent(~{::#content}, ~{::title}, ~{::#script})}"
-      xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="en" th:replace="~{base :: parent(~{::#content}, ~{::title}, ~{::#script})}">
 <head>
   <title id="title">Chat</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -488,7 +500,7 @@
       </div>
       <ul class="space-y-1">
         <li th:each="contact : ${contacts}">
-          <a data-th-href="@{'/user/chat/' + ${contact.name}}"
+          <a data-th-href="@{'/user/chat/' + ${contact.email}}"
              data-th-text="${contact.name}"
              class="block px-3 py-2 rounded hover:bg-purple-500 transition duration-200"
              onclick="closeContacts()"></a>
@@ -514,20 +526,21 @@
 
 
           <!-- Incoming -->
-<!--          <th:if="${#strings.equalsIgnoreCase(msg.fromUser, toUser)}"> &lt;!&ndash; For incoming &ndash;&gt;-->
-<!--          <th:if="${!#strings.equalsIgnoreCase(msg.fromUser, toUser)}"> &lt;!&ndash; For outgoing &ndash;&gt;-->
 
+<!--          <div th:if="${msg.fromUser == toUser}" class="flex items-start gap-2">-->
+          <div th:if="${msg.fromUser.equals(toUser)}" class="flex items-start gap-2">
 
-          <div th:if="${#strings.equalsIgnoreCase(msg.fromUser, toUser)}" class="flex items-start gap-2">
-            <div class="bg-gray-700 px-2 py-2 rounded-lg shadow max-w-xs">
+          <div class="bg-gray-700 px-2 py-2 rounded-lg shadow max-w-xs">
               <p class="text-white" th:text="${msg.content}"></p>
               <span th:text="${#temporals.format(msg.timestamp, 'dd MMM yyyy, hh:mm a')}"
                     class="block text-xs text-white mt-1 text-right"></span>
             </div>
           </div>
           <!-- Outgoing -->
-          <div th:if="${!#strings.equalsIgnoreCase(msg.fromUser, toUser)}" class="flex justify-end items-start gap-2">
-            <div class="bg-green-800 text-white px-2 py-2 rounded-lg shadow max-w-xs">
+<!--          <div th:if="${msg.fromUser != toUser}" class="flex justify-end items-start gap-2">-->
+          <div th:if="${!msg.fromUser.equals(toUser)}" class="flex justify-end items-start gap-2">
+
+          <div class="bg-green-800 text-white px-2 py-2 rounded-lg shadow max-w-xs">
               <p th:text="${msg.content}"></p>
               <!-- <span th:text="${#temporals.format(msg.timestamp, 'dd MMM yyyy, hh:mm a')}"
                     class="block text-xs text-green-100 mt-1 text-right"></span> -->
@@ -544,7 +557,8 @@
         </div>
       </div>
 
-      <!-- Message Input -->
+
+<!--       Message Input-->
       <form th:if="${toUser != null}" method="post" action="/user/chat/send"
             class="px-6 py-2 bg-gray-800 flex flex-wrap sm:flex-nowrap gap-3 items-center rounded-lg">
         <input type="hidden" name="toUser" th:value="${toUser}" />
@@ -556,19 +570,83 @@
                 required
         />
         <button
+                id="sendBtn"
                 type="submit"
                 class="px-5 py-2 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-full whitespace-nowrap transition"
         >
           Send
         </button>
       </form>
+
+
     </div>
 
   </div>
 </div>
 
 <!-- Scripts -->
+<!--<div id="script" th:fragment="script">-->
+<!--  <script>-->
+<!--    function openContacts() {-->
+<!--      document.getElementById('contactPanel').classList.remove('-translate-x-full');-->
+<!--      document.getElementById('contactPanel').classList.add('translate-x-0');-->
+<!--      document.getElementById('overlay').classList.remove('hidden');-->
+<!--    }-->
+
+<!--    function closeContacts() {-->
+<!--      document.getElementById('contactPanel').classList.add('-translate-x-full');-->
+<!--      document.getElementById('contactPanel').classList.remove('translate-x-0');-->
+<!--      document.getElementById('overlay').classList.add('hidden');-->
+<!--    }-->
+<!--  </script>-->
+<!--  <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>-->
+<!--  <script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>-->
+
+<!--  <script>-->
+<!--    let stompClient = null;-->
+<!--    let currentUser = /*[[${#httpServletRequest.remoteUser}]]*/ '';  // Thymeleaf or assign current user manually-->
+<!--    let receiver = ''; // You set this to the contact you're chatting with-->
+
+<!--    function connect() {-->
+<!--        const socket = new SockJS('/ws'); // '/ws' must match your WebSocketConfig-->
+<!--        stompClient = Stomp.over(socket);-->
+<!--        stompClient.connect({}, function (frame) {-->
+<!--            console.log('Connected: ' + frame);-->
+
+<!--            // Subscribe to your inbox-->
+<!--            stompClient.subscribe('/topic/messages/' + currentUser, function (messageOutput) {-->
+<!--                const message = JSON.parse(messageOutput.body);-->
+<!--                showMessage(message);-->
+<!--            });-->
+<!--        });-->
+<!--    }-->
+
+<!--    function sendMessage() {-->
+<!--        const msg = {-->
+<!--            fromUser: currentUser,-->
+<!--            toUser: receiver,-->
+<!--            content: document.getElementById("messageInput").value-->
+<!--        };-->
+<!--        stompClient.send("/app/chat", {}, JSON.stringify(msg));-->
+<!--        document.getElementById("messageInput").value = '';-->
+<!--    }-->
+
+<!--    function showMessage(message) {-->
+<!--        const messageBox = document.getElementById("chatBox");-->
+<!--        const div = document.createElement("div");-->
+<!--        div.textContent = message.fromUser + ": " + message.content;-->
+<!--        messageBox.appendChild(div);-->
+<!--        messageBox.scrollTop = messageBox.scrollHeight;-->
+<!--    }-->
+
+<!--    window.onload = connect;-->
+<!--  </script>-->
+
+<!--</div>-->
+
+<!-- Scripts -->
 <div id="script" th:fragment="script">
+  <!-- Contact panel toggle script -->
   <script>
     function openContacts() {
       document.getElementById('contactPanel').classList.remove('-translate-x-full');
@@ -582,7 +660,18 @@
       document.getElementById('overlay').classList.add('hidden');
     }
   </script>
+
+  <!-- SockJS and STOMP libraries -->
+  <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
+
+
+  <script th:src="@{/js/websocket-chat.js}" defer></script>
+
 </div>
+
+
+
 </body>
 </html>
 

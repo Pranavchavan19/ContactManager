@@ -59,9 +59,9 @@ public class ChatController {
 
     @GetMapping
     public String chatHome(Model model, Authentication authentication) {
-        String name = Helper.getEmailOfLoggedInUser(authentication);
-//        User user = userService.getUserByEmail(email);
-         User user = userService.getByName(name);
+        String email = Helper.getEmailOfLoggedInUser(authentication);
+        User user = userService.getUserByEmail(email);
+//         User user = userService.getByName(name);
         List<Contact> contacts = contactService.getByUserId(user.getUserId());
         model.addAttribute("contacts", contacts);
         return "user/chat"; // chat.html
@@ -99,7 +99,7 @@ public String chatPage(Model model, Principal principal) {
     // }
 
     @GetMapping("/{toUser}")
-public String chatWithContact(@PathVariable String toUser, Model model, Authentication authentication) {
+    public String chatWithContact(@PathVariable String toUser, Model model, Authentication authentication) {
     String fromUser = Helper.getEmailOfLoggedInUser(authentication);
 
     // Get chat history
